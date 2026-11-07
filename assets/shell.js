@@ -10,9 +10,16 @@
   document.addEventListener('DOMContentLoaded', function(){
     // 1. drawer
     var drawer = $('#cx-drawer'), backdrop = $('#cx-backdrop'), burger = $('#cx-burger'), dx = $('#cx-drawer-x');
-    function openDrawer(e){ if(e) e.preventDefault(); document.body.classList.add('cx-drawer-open'); drawer.setAttribute('aria-hidden','false'); }
-    function closeDrawer(){ document.body.classList.remove('cx-drawer-open'); }
-    if (burger) { burger.onclick = openDrawer; }
+    function openDrawer(e){ if(e) e.preventDefault();
+      document.body.classList.remove('cx-drawer-drawn');           // restart animation cleanly
+      void drawer.offsetWidth;                                     // reflow
+      $$('.cx-drawer .cx-nav').forEach(function(n, i){ n.style.setProperty('--cx-d', (i * 24) + 'ms'); });
+      document.body.classList.add('cx-drawer-open', 'cx-drawer-drawn');
+      drawer.setAttribute('aria-expanded', 'true'); drawer.setAttribute('aria-hidden', 'false'); }
+    function closeDrawer(){ document.body.classList.remove('cx-drawer-open','cx-drawer-drawn'); drawer.setAttribute('aria-expanded','false'); }
+    if (burger) { burger.onclick = function(e){ e.preventDefault();
+      (document.body.classList.contains('cx-drawer-open') ? closeDrawer : openDrawer)(); }; }
+    document.querySelectorAll('.cx-drawer .cx-nav').forEach(function(n){ n.addEventListener('click', function(){ closeDrawer(); }); });
     if (dx) { dx.onclick = closeDrawer; }
     if (backdrop) { backdrop.onclick = closeDrawer; }
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { closeDrawer(); hidePop(); } });
@@ -94,11 +101,7 @@
     $$('#cx-tabbar .cx-tab').forEach(function(t){ if (location.pathname.endsWith(t.getAttribute('href'))) t.classList.add('cx-on'); });
     // 10. drawer cascade when opened
     $$('.cx-drawer .cx-nav').forEach(function(n, i){ n.style.transitionDelay = (i * 22) + 'ms'; });
-    if (burger) { var origOpen = burger.onclick; burger.onclick = function(e){
-      document.body.classList.add('cx-drawer-drawn');
-      setTimeout(function(){ document.body.classList.remove('cx-drawer-drawn'); }, 700);
-      if (origOpen) origOpen(e); };
-    }
+
     var gVal = $('#g-val'), gp = document.getElementById('g-plus'), gm = document.getElementById('g-minus');
     function goal(){ return parseFloat(localStorage.getItem('crk:goal') || '10'); }
     function setGoal(v){ v = Math.max(1, Math.min(50, v)); localStorage.setItem('crk:goal', v); if (gVal) gVal.textContent = v; }

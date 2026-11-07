@@ -64,6 +64,7 @@ body.cx-reading .cx-main { max-width: 62rem; }
   display: grid; gap: .6rem; font-size: .85rem; }
 .cx-streak { color: var(--muted); }
 .cx-backdrop { position: fixed; inset: 0; background: rgba(6,10,16,.45); backdrop-filter: blur(3px); z-index: 50; }
+@media (max-width: 1000px) { body.cx-drawer-open .cx-backdrop { display: block; } }
 .cx-backdrop.hidden { display: none; }
 
 @media (max-width: 1000px) {
@@ -314,14 +315,11 @@ body.cx-reading .cx-main { max-width: 62rem; }
 .cx-conf i { position: absolute; width: 9px; height: 14px; border-radius: 2px; opacity: .95; animation: cxDrop var(--cx-fall, 2.4s) cubic-bezier(.2,.6,.4,1) forwards; }
 @keyframes cxDrop { from { transform: translateY(-6vh) rotate(20deg); opacity: 1; } to { transform: translateY(108vh) rotate(560deg); opacity: .85; } }
 
-/* drawer cascade (persists while drawer is open) */
+/* drawer cascade — one-shot animation, final state always visible */
 @media (max-width: 1000px) {
-  .cx-drawer .cx-nav { opacity: 0; transform: translateX(-10px); }
-  body.cx-drawer-open .cx-drawer .cx-nav { opacity: 1; transform: none;
-    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
-  body.cx-drawer-open .cx-drawer .cx-grp-t { opacity: 0; animation: cxFadeIn .4s .1s forwards; }
-  @keyframes cxFadeIn { to { opacity: 1; } }
-  .cx-drawer-foot, .cx-drawer-head { opacity: 1; }
+  body.cx-drawer-drawn .cx-drawer .cx-nav { animation: cxNavIn .32s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--cx-d, 0ms); }
+  body.cx-drawer-drawn .cx-drawer .cx-grp-t { animation: cxFadeIn .4s both; animation-delay: .08s; }
+  @keyframes cxNavIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
 }
 
 /* charts */
