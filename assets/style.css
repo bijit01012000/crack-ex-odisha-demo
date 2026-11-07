@@ -494,3 +494,6 @@ button.mk { float: right; border: 1px solid var(--border); background: var(--pan
 
 .modwrap { max-width: 60rem; margin: 0 auto; }
 .modwrap h3 { margin-bottom: 0; }
+/* notes */
+textarea#notes { width: 100%; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; margin-top: .6rem; }
+details.card.notes { margin: 1rem 0; }

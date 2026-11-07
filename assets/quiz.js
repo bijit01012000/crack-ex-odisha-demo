@@ -51,6 +51,14 @@
       };
     }
     // quiz start on chapter page
+    var nt = document.getElementById('notes');
+    if (nt){
+      var nk = 'crk:notes:' + location.pathname.match(/chapter-(\d+)\.html/)[1];
+      nt.value = getJ('crk:notes', {})[nk] || '';
+      nt.oninput = function(){
+        var o = getJ('crk:notes', {}); o[nk] = nt.value; setJ('crk:notes', o);
+      };
+    }
     var qbtn = document.getElementById('btn-quiz');
     if (qbtn && window.startChapterQuiz) qbtn.onclick = window.startChapterQuiz;
     renderPerChapter();
