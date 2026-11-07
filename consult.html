@@ -3,8 +3,9 @@
 <title>Consult — Crack-Ex Odisha</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" media="all">
-<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/shell.css">
-<script src="assets/boot.js"></script>
+<link rel="stylesheet" href="assets/style.css?v=202611080155">
+<link rel="stylesheet" href="assets/shell.css?v=202611080155">
+<script src="assets/boot.js?v=202611080155"></script>
 <meta name="description" content="Crack-Ex Odisha — Indian Polity & Governance prep. 2,067 MCQs, 29 chapters, quizzes, dashboards.">
 </head><body class="">
 
@@ -38,17 +39,22 @@
     <div class="cx-streak" title="Daily streak (localStorage)">🔥 <span id="cx-streak">—</span></div>
   </div>
 </aside>
-<div class="cx-backdrop hidden" id="cx-backdrop"></div>
+<div class="cx-backdrop" id="cx-backdrop"></div>
 <div class="cx-sprog" id="cx-sprog"></div>
 <main class="cx-main"><div class='cx-cons'>
 <h1>Talk to a mentor <span class='cx-demo-badge'>demo</span></h1>
-<p>15-minute strategy slots with senior mentors and recent toppers. Choose any slot — confirmation is illustrative (no backend).</p>
-<div class='cx-card'>
-<div class='cx-consrow'><input class='cx-in' type='date' id='day'>
-<select class='cx-in' id='slot'><option>10:00 AM</option><option>2:00 PM</option><option>6:30 PM</option></select>
-<input class='cx-in' id='ph' placeholder='Phone / email'></div>
-<button class='cx-btn cx-primary' onclick="cx_book()">Book slot</button>
-<div id='conf'></div></div></div></main>
+<p class='cx-muted' style='max-width:52ch'>15-minute strategy slots with senior mentors and recent toppers. Pick any slot and date — confirmation is illustrative only (no backend).</p>
+<div class='cx-card cx-cons'>
+<div class='cx-consrow'>
+<div class='cx-field'><label for='day'>📅 Date</label><input class='cx-in' type='date' id='day'></div>
+<div class='cx-field'><label for='slot'>⏰ Time slot</label><select class='cx-in' id='slot'><option>10:00 AM</option><option>2:00 PM</option><option>6:30 PM</option></select></div>
+<div class='cx-field'><label for='ph'>📞 Reachable at</label><input class='cx-in' id='ph' placeholder='Phone / email'></div>
+<button class='cx-btn cx-primary cx-consbtn' onclick="cx_book()">Book slot</button>
+</div>
+<div id='conf' class='cx-confbox' aria-live='polite'></div>
+<p class='cx-footline'>✅ Confirmation lands here — the real thing would create an actual booking.</p>
+</div>
+<div class='cx-mets cx-cons3'>🎙 Slots are illustrative in the demo — production would integrate Calendly/Meet.</div></div></main>
 <nav class="cx-tabbar" id="cx-tabbar" aria-label="Quick nav">
 <a class="cx-tab" href="index.html"><span class="cx-tab-ic">📚</span>Chapters</a>
 <a class="cx-tab" href="dashboard.html"><span class="cx-tab-ic">📊</span>Dashboard</a>
@@ -57,8 +63,8 @@
 </nav>
 <footer class="cx-foot"><span>Built by <b>Crack-Ex Odisha</b> · Interactive demo for client visualization</span>
 <nav class="cx-footnav"><a href="index.html">Chapters</a><a href="quiz.html">Quiz</a><a href="dashboard.html">Dashboard</a><a href="consult.html">Consult</a><a href="pricing.html">Pricing</a></nav></footer>
-<script src="assets/search-index.js" defer></script>
-<script src="assets/qa_bank.js" defer></script>
-<script src="assets/shell.js" defer></script>
+<script src="assets/search-index.js?v=202611080155" defer></script>
+<script src="assets/qa_bank.js?v=202611080155" defer></script>
+<script src="assets/shell.js?v=202611080155" defer></script>
 
 </body></html>

@@ -417,3 +417,18 @@ h1, h2, h3 { letter-spacing: -0.02em; font-weight: 750; }
 .cx-dgrid .cx-card .cx-chart { flex: 1; }
 .cx-dgrid .cx-card p { margin: .4rem 0 0; }
 .cx-heat { max-width: 330px; }
+
+/* consult layout v2 */
+.cx-consrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .7rem; align-items: end; }
+.cx-field { display: grid; gap: .28rem; }
+.cx-field label { font-size: .78rem; color: var(--muted); font-weight: 600; }
+.cx-field .cx-in { width: 100%; }
+.cx-consbtn { justify-self: end; min-width: 140px; padding: .62rem 1.1rem; }
+@media (max-width: 620px) { .cx-consbtn { width: 100%; } }
+.cx-confbox { min-height: 0; }
+.cx-footline { color: var(--muted); font-size: .82rem; margin-top: .5rem; }
+.cx-cons3 { margin-top: 1.2rem; }
+
+/* seed banner */
+.cx-seedbar { display: flex; align-items: center; justify-content: space-between; gap: .7rem; flex-wrap: wrap;
+  border-left: 3px solid var(--accent); font-size: .88rem; }

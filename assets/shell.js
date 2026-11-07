@@ -7,7 +7,38 @@
 
   function currentTheme(){ var t = document.documentElement.getAttribute('data-theme'); return THEMES.indexOf(t) !== -1 ? t : 'paper'; }
 
+  function seedRand2(s){ return function(){ s = (s * 9301 + 49297) % 233280; return s / 233280; }; }
+
+  // Preload demo progress on first visit so every chart animates with real numbers
+  function ensureDemoData(){
+    var done = {};
+    try { done = JSON.parse(localStorage.getItem('crk:done') || '{}'); } catch(e){}
+    var marked = Object.keys(done).reduce(function(a, k){ return a + Object.keys(done[k] || {}).length; }, 0);
+    if ((marked || 0) > 60) return;                       // real user progress exists
+    try {
+      if (localStorage.getItem('crk:seeded')) return;
+      var rnd = seedRand2(11); var d = {};
+      // chapters 1-9 deep, 10-20 partial, 21+ light
+      for (var i = 1; i <= 29; i++){
+        var cap = (window.QAB || []).filter(function(q){ return q.i === i; }).length; // per-chapter totals
+        var base = i <= 9 ? .92 : (i <= 18 ? .58 : (i <= 25 ? .30 : .12));
+        var want = Math.min(cap, Math.round(cap * (base + rnd() * .12)));
+        want = Math.max(0, want);
+        if (want > 0){
+          d['c' + i] = {};
+          for (var n = 1; n <= want; n++) d['c' + i]['Q' + n] = 1;
+        }
+      }
+      localStorage.setItem('crk:done', JSON.stringify(d));
+      localStorage.setItem('crk:streak', JSON.stringify({ days: 7, last: new Date().toISOString().slice(0,10) }));
+      localStorage.setItem('crk:quizlog', JSON.stringify({ right: 216, total: 278 }));
+      localStorage.setItem('crk:goal', '12');
+      localStorage.setItem('crk:seeded', '1');
+    } catch(e){}
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
+    ensureDemoData();
     // 1. drawer
     var drawer = $('#cx-drawer'), backdrop = $('#cx-backdrop'), burger = $('#cx-burger'), dx = $('#cx-drawer-x');
     function openDrawer(e){ if(e) e.preventDefault();
@@ -85,6 +116,12 @@
     var sp = $('#cx-sprog');
     if (sp) { var onS = function(){ var h = document.documentElement; var max = (h.scrollHeight - h.clientHeight) || 1; sp.style.width = (h.scrollTop/max*100).toFixed(2) + '%'; };
       document.addEventListener('scroll', onS, { passive: true }); onS(); }
+    var cd = document.getElementById('cx-cleardata');
+    if (cd) cd.onclick = function(){
+      ['crk:done','crk:streak','crk:quizlog','crk:seeded','crk:goal'].forEach(function(k){ try { localStorage.removeItem(k); } catch(e){} });
+      location.reload();
+    };
+
     // assistant action cards + clear chat
     $$('.cx-aci .cx-chip[data-act]').forEach(function(c){
       c.onclick = function(){
