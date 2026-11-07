@@ -24,7 +24,7 @@
     if (thbtn) {
       thbtn.onclick = togglePop;
       thpop.querySelectorAll('.cx-th').forEach(function(b){
-        b.onclick = function(){ setThemeTokens(b.dataset.th); };
+        b.onclick = function(){ setThemeTokens(b.dataset.th); thpop.classList.add('hidden'); };
       });
     }
     ['#cx-darkq','#cx-darkq2'].forEach(function(sel){
