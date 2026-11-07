@@ -2,6 +2,9 @@
 (function(){
   var LS = { done:'crk:done', notes:'crk:notes' };
 
+  function $(s){ return document.querySelector(s); }
+  function $$(s){ return Array.from(document.querySelectorAll(s)); }
+
   function getJ(k, d){ try{ return JSON.parse(localStorage.getItem(k)||'null') || d; }catch(e){ return d; } }
   function setJ(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
   window.getJ = getJ; window.setJ = setJ;
@@ -94,10 +97,19 @@
       clearInterval(iv);
       var wrong = [];
       for (var i = 0; i < idx; i++) if (pool[i]._res === 'w') wrong.push(pool[i]);
+      // accumulate accuracy log for dashboard gauge
+      var attempted = idx >= pool.length ? pool.filter(function(q){ return q._res && q._res !== 's'; }).length : 0;
+      if (attempted){
+        var log = getJ('crk:quizlog', { right: 0, total: 0 });
+        var rightNow = attempted - wrong.length;
+        log.right += rightNow; log.total += attempted;
+        setJ('crk:quizlog', log);
+      }
       host.innerHTML = '<div class="cx-qz"><h2>' + score + '/' + pool.length + ' ✅</h2>' +
-        '<p class="cx-muted">Score saved locally. ' + (wrong.length ? wrong.length + ' to review.' : 'Perfect run!') + '</p>' +
+        '<p class="cx-muted">Score + accuracy saved locally. ' + (wrong.length ? wrong.length + ' to review.' : 'Perfect run!') + '</p>' +
         (wrong.length ? '<h3>Review:</h3>' + wrong.map(function(q){ return '<div class="cx-q" style="padding:.6rem .9rem"><b>' + escX(q.stem.slice(0,140)) + '</b><div class="cx-ans">Answer ' + q.a + '</div></div>'; }).join('') : '') +
-        '<button class="cx-btn cx-primary" onclick="this.closest(\'#quiz\').classList.add(\'hidden\');this.closest(\'#quiz\').innerHTML=\'\'">Close</button></div>';
+        '</div>';
+      if (window.cx_confetti) window.cx_confetti();
     }
 
     function draw(){
@@ -165,26 +177,64 @@
   };
 
   // ---------- assistant (canned bot) ----------
-  window.ask = function(q){
-    var log = document.getElementById('elog'); if (!log) return;
-    log.insertAdjacentHTML('beforeend', '<div class="msgUser"><b>You:</b> ' + escX(q) + '</div>');
-    setTimeout(function(){ log.insertAdjacentHTML('beforeend', '<div class="msgBot"><b>Bot:</b> ' + answerBot(q) + '</div>'); }, 260);
+  var CHKEY = 'crk:chat';
+  function pushLog(html){ var log = document.getElementById('elog'); if (!log) return; log.insertAdjacentHTML('beforeend', html); log.scrollTop = log.scrollHeight; }
+
+  function renderHistory(){
+    var msgs = getJ(CHKEY, []);
+    if (msgs.length) msgs.forEach(function(m){ pushLog('<div class="' + m[0] + '">' + m[1] + '</div>'); });
+    if (!msgs.length) pushLog('<div class="msgBot">👋 I answer from a canned script — try "Explain Article 356", ask about ordinances, or hit <b>Test me!</b></div>');
+  }
+  document.addEventListener('DOMContentLoaded', renderHistory);
+
+  window.ask = function(q, opts){
+    q = (q || '').trim(); if (!q) return;
+    var msgs = getJ(CHKEY, []);
+    msgs.push(['msgUser', escX(q)]); setJ(CHKEY, msgs);
+    pushLog('<div class="msgUser"><b>' + escX(q) + '</b></div>');
+    var im = document.createElement('div'); im.className = 'cx-typing'; im.innerHTML = '<i>​</i><i>​</i><i>​</i>';
+    document.getElementById('elog').appendChild(im);
+    setTimeout(function(){
+      im.remove();
+      var a = answerBot(q);
+      var html = a.replace(/\n/g, '<br>');
+      var rel = related(q); if (rel) html += rel;
+      var msgs2 = getJ(CHKEY, []); msgs2.push(['msgBot', html]); setJ(CHKEY, msgs2);
+      pushLog('<div class="msgBot">' + html + '</div>');
+    }, 620);
   };
+
+  function related(q){
+    var l = (q || '').toLowerCase();
+    var words = l.replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(function(w){ return w.length > 3 &&
+      ['text','about','explain','briefly','question','questions','answer','article','what','when','how','does','with','this','that','story','used','which','tell','more','test'].indexOf(w) === -1; });
+    if (!words.length) return '';
+    var hits = [];
+    QAB.forEach(function(qq){
+      var s = (qq.stem + ' ' + qq.opts.join(' ')).toLowerCase();
+      var sc = 0; words.forEach(function(w){ if (s.indexOf(w) !== -1) sc++; });
+      if (sc > 0 && qq.a) hits.push({ s: sc, q: qq });
+    });
+    if (!hits.length) return '';
+    hits.sort(function(a, b){ return b.s - a.s; });
+    var top = hits.slice(0, 3);
+    return '<div style="margin-top:.45rem">🔗 Also study: ' + top.map(function(t){
+      return '<a href="chapter-' + String(t.q.i).padStart(2,'0') + '.html#q' + t.q.n + '">Q' + t.q.n + ' · ' + escX(t.q.t.slice(0, 22)) + '</a>';
+    }).join(' · ') + '</div>';
+  }
 
   function answerBot(q){
     var l = (q || '').toLowerCase();
-    if (/356|president's rule|presidents rule/.test(l))
-      return 'Article 356 is President’s Rule: failure of constitutional machinery in a state. Needs parliamentary approval in 2 months and limited judicial review (S.R. Bommai 1994).';
-    if (/ordinance/.test(l))
-      return 'Ordinance power (Art 123 / 213): a legislative shortcut when Parliament isn’t seated — lapses six weeks after reassembly, can’t amend the Constitution, and re-promulgation draws criticism (D.C. Wadhwa).';
-    if (/emergency|352/.test(l))
-      return 'National Emergency (Art 352) covers war, external aggression, armed rebellion (post-44th). Needs special majority approval within a month; Art 19 auto-suspends only during war/external aggression (358); Art 20/21 are never suspendable.';
-    if (/pocket|veto|1986/.test(l))
-      return 'Pocket veto — President takes indefinite no-action (no time limit in Art 111); famously used by President Zail Singh in 1986 on the Indian Postal Bill.';
-    if (/21|libert|privac|life/.test(l))
-      return 'Art 21 is the constitution’s growth profession: privacy (Puttaswamy 2017), speedy trial, shelter, livelihood, legal aid, dignity in death (Common Cause 2018). Art 21A = 6-14 yrs free & compulsory education.';
-    if (/laxmikanth|study|plan|book/.test(l))
-      return 'Suggested routine: 1 chapter/day → 10-question quiz at the chapter page → flashcards for 10 min → mark dashboard. Hit the day goal for a streak!';
-    return 'This demo bot scripts a few canned intents — ask about: Art 356, ordinances, emergency, pocket veto, Art 21, or a quiz plan. Everything inline is demo-only.';
+    var A = function(t){ return '🏛 ' + t; };
+    if (/42nd|amendment/.test(l)) return A('The 42nd Amendment (1976) —:\n• Preamble words: Socialist, Secular, Integrity\n• DPSP additions: 39A (legal aid), 43A (worker participation), 48A (environment)\n• Art 38(2): minimise inequalities\n• Tried to extend Art 31C to all DPSPs — struck down in Minerva Mills (1980).');
+    if (/bommai/.test(l)) return A('S.R. Bommai (1994):\n• President\'s Rule (Art 356) is judicially reviewable\n• Floor test is the preferred test of majority\n• Secularism = part of the basic structure\n• Dissolution before parliamentary approval needs review.');
+    if (/emergency|352/.test(l)) return A('National Emergency flow (Art 352):\n1. Grounds: war, external aggression, armed rebellion (post-44th)\n2. Written Cabinet advice → President proclaims\n3. Approval by special majority within 1 month\n4. Continuation every 6 months\n5. Revoke: President anytime; Lok Sabha by simple majority\nArt 19 auto-suspends only for war/external aggression (358); Art 20-21 never.');
+    if (/pocket/.test(l)) return A('Pocket veto = President keeps a bill pending indefinitely — Art 111 sets no time limit, and President\'s returning-power doesn\'t apply to Money Bills. President Zail Singh famously pocket-vetoed the Indian Postal Bill in 1986.');
+    if (/quizmerazil|test me|quiz/.test(l)) return A('Quick drill:\n1. Which Article deals with Financial Emergency? (360)\n2. Can Art 21 be suspended during Emergency? (Never, post-44th)\n3. Who can remove the Vice-President? (Rajya Sabha resolution + Lok Sabha agreement)\nOpen the chapter pages for the full 2,067-Q bank!');
+    if (/356|president/.test(l)) return A('Art 356 essentials:\n• Report of Governor OR otherwise → President satisfied\n• State executive dismissed, assembly suspended/dissolved\n• Approval: both houses in 2 months; initially 6 months\n• Beyond 1 year: needs emergency OR EC certification\n• Bommai: judicial review + floor test.');
+    if (/ordinance/.test(l)) return A('Ordinance (Art 123 / Governor 213):\n• Co-extensive with law-making power\n• Only when legislature isn\'t in session\n• Lapses 6 weeks after reassembly\n• Cannot amend the Constitution\n• Re-promulgation is a fraud on the Constitution (D.C. Wadhwa).');
+    if (/21|libert|privac/.test(l)) return A('Art 21 — the growth franchise:\n• Privacy — Puttaswamy (2017, 9 judges)\n• Speedy trial — Hussainara\n• Legal aid — Khatri\n• Shelter, livelihood, clean environment, dignity in dying (Common Cause 2018)\n• Handbook methodology: just, fair and reasonable procedure (Maneka Gandhi).');
+    if (/know|book|study|plan|laxmikanth/.test(l)) return A('Demo study plan:\n1. One chapter per day (29 total)\n2. Chapter quiz (10 Q) right after reading\n3. Flashcards: 10 minutes\n4. Dashboard streak ✅\nThat gives you three full revision rounds before OPSC Prelims.');
+    return A('This demo bot replies to a fixed script: try asking about \"42nd amendment\", \"Bommai\", \"emergency\", \"pocket veto\", \"ordinance\", \"Art 21\", or \"test me\". Features (persistence, related-Question links) are hooked already — plug a real LLM here later.');
   }
 })();

@@ -2,6 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dashboard — Crack-Ex Odisha</title>
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/shell.css">
+<script src="assets/boot.js"></script>
 <meta name="description" content="Crack-Ex Odisha — Indian Polity & Governance prep. 2,067 MCQs, 29 chapters, quizzes, dashboards.">
 </head><body class="">
 
@@ -36,20 +37,33 @@
   </div>
 </aside>
 <div class="cx-backdrop hidden" id="cx-backdrop"></div>
+<div class="cx-sprog" id="cx-sprog"></div>
 <main class="cx-main"><div class='cx-dash'>
 <h1>Dashboard <span class='cx-demo-badge'>localStorage demo</span></h1>
 <div class='cx-dgrid'>
-<div class='cx-card cx-ring-card'><div class='cx-ring' id='ring'><svg viewBox='0 0 120 120'><circle cx='60' cy='60' r='52' class='cx-ring-bg'/><circle cx='60' cy='60' r='52' class='cx-ring-fg' id='ring-fg'/></svg><div class='cx-ring-num' id='ring-num'>0%</div></div><span>Overall completion</span></div>
-<div class='cx-card'><h3>🔥 Streak</h3><div class='cx-big' id='streak-day'>— day</div><p>Show up daily; streaks drive discipline.</p></div>
-<div class='cx-card'><h3>🎯 Daily goal</h3><div class='cx-goal-ctl'><button class='cx-btn sm' id='g-minus'>−</button><span id='g-val'>10</span><button class='cx-btn sm' id='g-plus'>+</button></div><p>questions marked done / day</p></div>
+<div class='cx-card cx-ring-card'><div class='cx-ring' id='ring'><svg viewBox='0 0 120 120'><circle cx='60' cy='60' r='52' class='cx-ring-bg'/><circle cx='60' cy='60' r='52' class='cx-ring-fg' id='ring-fg'/></svg><div class='cx-ring-num' id='ring-num'>0%</div></div><span class='cx-muted'>Overall completion</span></div>
+<div class='cx-card'><h3>🔥 Streak</h3><div class='cx-big cx-flame' id='streak-day'>— day</div><p class='cx-muted'>Show up daily; streaks drive discipline.</p></div>
+<div class='cx-card'><h3>🎯 Daily goal</h3><div class='cx-goal-ctl'><button class='cx-btn sm' id='g-minus'>−</button><span id='g-val'>10</span><button class='cx-btn sm' id='g-plus'>+</button></div><p class='cx-muted'>questions marked done / day</p></div>
+</div>
+<div class='cx-dgrid'>
+<div class='cx-card cx-wide2'><h3>📅 Weekly activity <small class="cx-demo-badge">demo data</small></h3><div id='chart-week' class='cx-chart'></div></div>
+<div class='cx-card'><h3>📚 Volume split <small class="cx-demo-badge">demo</small></h3><div id='chart-donut' class='cx-chart'></div></div>
+<div class='cx-card'><h3>🎯 Accuracy gauge</h3><div id='chart-gauge' class='cx-chart'></div></div>
+<div class='cx-card cx-wide2'><h3>🗓 30-day heat-map <small class="cx-demo-badge">demo</small></h3><div id='chart-heat' class='cx-chart'></div></div>
+<div class='cx-card cx-wide2'><h3>🏆 Demo leaderboard — this week</h3><div id='chart-lb' class='cx-chart'></div></div>
 </div>
 <div class='cx-card cx-wide'><h3>Per-chapter progress</h3><div id='perchap'></div></div>
 </div></main>
+<nav class="cx-tabbar" id="cx-tabbar" aria-label="Quick nav">
+<a class="cx-tab" href="index.html"><span class="cx-tab-ic">📚</span>Chapters</a>
+<a class="cx-tab" href="search.html"><span class="cx-tab-ic">🔍</span>Search</a>
+<a class="cx-tab" href="quiz.html"><span class="cx-tab-ic">⚡</span>Quiz</a>
+<a class="cx-tab" href="dashboard.html"><span class="cx-tab-ic">📊</span>Dashboard</a>
+</nav>
 <footer class="cx-foot"><span>Built by <b>Crack-Ex Odisha</b> · Interactive demo for client visualization</span>
 <nav class="cx-footnav"><a href="index.html">Chapters</a><a href="quiz.html">Quiz</a><a href="dashboard.html">Dashboard</a><a href="consult.html">Consult</a><a href="pricing.html">Pricing</a></nav></footer>
 <script src="assets/search-index.js" defer></script>
 <script src="assets/qa_bank.js" defer></script>
-<script src="assets/app.js" defer></script>
 <script src="assets/shell.js" defer></script>
 <script src='assets/quiz.js' defer></script>
 </body></html>

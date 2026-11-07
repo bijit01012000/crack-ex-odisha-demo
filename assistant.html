@@ -2,6 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Assistant — Crack-Ex Odisha</title>
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/shell.css">
+<script src="assets/boot.js"></script>
 <meta name="description" content="Crack-Ex Odisha — Indian Polity & Governance prep. 2,067 MCQs, 29 chapters, quizzes, dashboards.">
 </head><body class="">
 
@@ -36,16 +37,24 @@
   </div>
 </aside>
 <div class="cx-backdrop hidden" id="cx-backdrop"></div>
-<main class="cx-main"><div class='cx-bots'>
-<h1>AI Doubt Assistant <span class='cx-demo-badge'>canned demo bot</span></h1>
-<div id='elog' class='cx-el' aria-live='polite'></div>
-<form class='cx-botin' id='queryform'><input class='cx-in' id='usertext' autocomplete='off' placeholder='Ask about an article, case, or concept…'><button class='cx-btn cx-primary'>Send</button></form>
-<div class='cx-chips'><button class="cx-btn sm ghost" onclick="ask('Explain Article 356')">Explain Article 356</button><button class="cx-btn sm ghost" onclick="ask('Ordinance vs Act')">Ordinance vs Act</button><button class="cx-btn sm ghost" onclick="ask('When was pocket veto used?')">When was pocket veto used?</button><button class="cx-btn sm ghost" onclick="ask('Why is Art 21 huge?')">Why is Art 21 huge?</button><button class="cx-btn sm ghost" onclick="ask('quiz me')">quiz me</button></div></div></main>
+<div class="cx-sprog" id="cx-sprog"></div>
+<main class="cx-main"><div class='cx-bot'>
+<div class='cx-bot-head'><h1>AI Doubt Assistant</h1> <span class='cx-demo-badge'>canned demo — no backend</span></div>
+<div class='cx-botcats'><div id='elog' class='cx-el' aria-live='polite'></div></div>
+<div class='cx-aci'><span class='cx-muted'>Quick actions:</span><button class="cx-chip" data-act="q42">42nd Amendment clean-up</button><button class="cx-chip" data-act="qbommai">Bommai essentials</button><button class="cx-chip" data-act="qemg">Emergency flow</button><button class="cx-chip" data-act="qpocket">Pocket veto story</button><button class="cx-chip" data-act="quizthree">Test me! (3Q)</button></div>
+<form class='cx-botin' id='queryform'><input class='cx-in' id='usertext' autocomplete='off' placeholder='Ask about an article, case, or concept… (Enter to send)'><button class='cx-btn cx-primary'>Send</button></form>
+<div class='cx-botfoot'><button class='cx-chip' id='cx-clearch'>🧹 Clear chat</button><span class='cx-muted'>History is stored in this browser.</span></div>
+</div></main>
+<nav class="cx-tabbar" id="cx-tabbar" aria-label="Quick nav">
+<a class="cx-tab" href="index.html"><span class="cx-tab-ic">📚</span>Chapters</a>
+<a class="cx-tab" href="search.html"><span class="cx-tab-ic">🔍</span>Search</a>
+<a class="cx-tab" href="quiz.html"><span class="cx-tab-ic">⚡</span>Quiz</a>
+<a class="cx-tab" href="dashboard.html"><span class="cx-tab-ic">📊</span>Dashboard</a>
+</nav>
 <footer class="cx-foot"><span>Built by <b>Crack-Ex Odisha</b> · Interactive demo for client visualization</span>
 <nav class="cx-footnav"><a href="index.html">Chapters</a><a href="quiz.html">Quiz</a><a href="dashboard.html">Dashboard</a><a href="consult.html">Consult</a><a href="pricing.html">Pricing</a></nav></footer>
 <script src="assets/search-index.js" defer></script>
 <script src="assets/qa_bank.js" defer></script>
-<script src="assets/app.js" defer></script>
 <script src="assets/shell.js" defer></script>
 <script src='assets/quiz.js' defer></script>
 </body></html>
