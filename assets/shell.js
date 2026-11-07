@@ -151,7 +151,7 @@ function buildCharts(){
     host.innerHTML = '<div class="cx-barchart">' + vals.map(function(x){
       var h = Math.round(x.v / max * 100);
       var today = x.d === 'Sun';
-      return '<div class="cx-bcol"><div class="cx-bar3" style="height:' + h + '%; ' + (today ? 'background:linear-gradient(180deg,var(--accent),var(--accent-2))' : '') + '" title="' + x.v + ' Qs"><span>' + x.v + '</span></div><small>' + x.d + '</small></div>';
+      return '<div class="cx-bcol"><div class="cx-bar3' + (today ? ' cx-today' : '') + '" style="height:' + h + '%" title="' + x.v + ' Qs on ' + x.d + '"><span>' + x.v + '</span></div><small>' + x.d + '</small></div>';
     }).join('') + '</div>';
     requestAnimationFrame(function(){ host.querySelectorAll('.cx-bar3').forEach(function(b, i){ setTimeout(function(){ b.classList.add('cx-grow'); }, 80 * i); }); });
   }
@@ -165,7 +165,7 @@ function buildCharts(){
       var seg = C * d.v / 100; var el = '<circle r="40" cx="50" cy="50" fill="none" stroke="' + d.c + '" stroke-width="14" stroke-dasharray="' + seg.toFixed(1) + ' ' + (C - seg).toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '" transform="rotate(-90 50 50)"/>';
       off += seg; return el;
     }).join('');
-    host.innerHTML = '<div class="cx-donutwrap"><svg viewBox="0 0 100 100" class="cx-donut">' + arcs + '<text x="50" y="54" text-anchor="middle" font-size="15" font-weight="800" fill="currentColor">' + (data[0].v + data[1].v + data[2].v) + '%</text></svg>' +
+    host.innerHTML = '<div class="cx-donutwrap"><svg viewBox="0 0 100 100" class="cx-donut">' + arcs + '<text x="50" y="52" text-anchor="middle" font-size="17" font-weight="800" fill="currentColor">29</text><text x="50" y="63" text-anchor="middle" font-size="8" font-weight="600" fill="currentColor" opacity=".65">chapters</text></svg>' +
       '<div class="cx-legend">' + data.map(function(d){ return '<span><i style="background:' + d.c + '"></i>' + d.l + ' ' + d.v + '%</span>'; }).join('') + '</div></div>';
   }
 
@@ -190,7 +190,7 @@ function buildCharts(){
     var cells = [];
     for (var i = 29; i >= 0; i--){ var v = rnd(); if (i === 0) v = .75; var lvl = v < .25 ? 0 : (v < .55 ? 1 : (v < .85 ? 2 : 3)); cells.push({ l: lvl }); }
     host.innerHTML = '<div class="cx-heat">' + cells.map(function(c){ return '<i class="cx-h' + c.l + '"></i>'; }).join('') + '</div>' +
-      '<div class="cx-muted" style="font-size:.78rem;margin-top:.4rem"> vowed streak: ' + streak + ' day' + (streak === 1 ? '' : 's') + ' · squares = Qs done</div>';
+      '<div class="cx-muted" style="font-size:.78rem;margin-top:.4rem"> your streak: ' + streak + ' day' + (streak === 1 ? '' : 's') + ' · squares = Qs done</div>';
     requestAnimationFrame(function(){ host.querySelectorAll('.cx-heat i').forEach(function(c, i){ setTimeout(function(){ c.style.opacity = 1; c.style.transform = 'scale(1)'; }, 12 * i); }); });
   }
 
