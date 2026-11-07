@@ -314,9 +314,15 @@ body.cx-reading .cx-main { max-width: 62rem; }
 .cx-conf i { position: absolute; width: 9px; height: 14px; border-radius: 2px; opacity: .95; animation: cxDrop var(--cx-fall, 2.4s) cubic-bezier(.2,.6,.4,1) forwards; }
 @keyframes cxDrop { from { transform: translateY(-6vh) rotate(20deg); opacity: 1; } to { transform: translateY(108vh) rotate(560deg); opacity: .85; } }
 
-/* drawer cascade */
-.cx-drawer .cx-nav { opacity: 0; transform: translateX(-10px); }
-body.cx-drawer-drawn .cx-drawer .cx-nav { opacity: 1; transform: none; transition: opacity .32s ease, transform .32s cubic-bezier(.2,.8,.2,1); }
+/* drawer cascade (persists while drawer is open) */
+@media (max-width: 1000px) {
+  .cx-drawer .cx-nav { opacity: 0; transform: translateX(-10px); }
+  body.cx-drawer-open .cx-drawer .cx-nav { opacity: 1; transform: none;
+    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
+  body.cx-drawer-open .cx-drawer .cx-grp-t { opacity: 0; animation: cxFadeIn .4s .1s forwards; }
+  @keyframes cxFadeIn { to { opacity: 1; } }
+  .cx-drawer-foot, .cx-drawer-head { opacity: 1; }
+}
 
 /* charts */
 .cx-chart { min-height: 90px; }
@@ -373,3 +379,20 @@ body.cx-drawer-drawn .cx-drawer .cx-nav { opacity: 1; transform: none; transitio
 @media (min-width: 900px) { .cx-tabbar { display: none !important; } }
 
 @media (max-width: 599px) { .cx-qsearch { display: none !important; } }
+
+/* typography v3 — Inter, tighter tracking, slightly smaller */
+html { font-family: var(--cx-font); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body { letter-spacing: -0.008em; font-weight: 450; }
+h1, h2, h3 { letter-spacing: -0.02em; font-weight: 750; }
+.cx-nav { font-size: .88rem; font-weight: 500; letter-spacing: -0.005em; }
+.cx-grp-t { font-size: .62rem; font-weight: 700; }
+.cx-q summary, .cx-qhit summary { font-size: .95rem; }
+.cx-opts, .cx-opt { font-size: .92rem; }
+.cx-mets, .cx-muted { font-size: .85rem; letter-spacing: 0; }
+.cx-btn, .cx-chip { font-size: .86rem; letter-spacing: -0.005em; }
+.cx-footnav a, .cx-foot { font-size: .8rem; }
+.cx-top-actions .cx-cta { font-size: .84rem; font-weight: 600; }
+.cx-brand-t b { font-size: .88rem; font-weight: 700; letter-spacing: -0.01em; }
+.cx-brand-t small { font-size: .62rem; letter-spacing: .015em; }
+.cx-qsearch input { font-size: .88rem; }
+.cx-qsearch kbd { font-family: var(--cx-font); }

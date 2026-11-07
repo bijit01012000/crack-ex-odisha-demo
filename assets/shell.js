@@ -5,7 +5,7 @@
   function $(s){ return document.querySelector(s); }
   function $$(s){ return Array.from(document.querySelectorAll(s)); }
 
-  function currentTheme(){ var t = document.documentElement.getAttribute('data-theme'); return THEMES.indexOf(t) !== -1 ? t : 'light'; }
+  function currentTheme(){ var t = document.documentElement.getAttribute('data-theme'); return THEMES.indexOf(t) !== -1 ? t : 'paper'; }
 
   document.addEventListener('DOMContentLoaded', function(){
     // 1. drawer
@@ -29,7 +29,7 @@
     }
     ['#cx-darkq','#cx-darkq2'].forEach(function(sel){
       var el = $(sel); if (!el) return;
-      el.onclick = function(){ setThemeTokens(currentTheme().indexOf('dark') !== -1 || currentTheme() === 'amoled' ? 'light' : 'dark'); hidePop(); };
+      el.onclick = function(){ setThemeTokens(currentTheme().indexOf('dark') !== -1 || currentTheme() === 'amoled' ? 'paper' : 'dark'); hidePop(); };
     });
 
     // 3. ⌘K → focus global search; enter → go to search page with query
@@ -112,7 +112,7 @@
     };
   });
 
-  function setThemeTokens(t){ if (THEMES.indexOf(t) === -1) t = 'light';
+  function setThemeTokens(t){ if (THEMES.indexOf(t) === -1) t = 'paper';
     document.documentElement.setAttribute('data-theme', t);
     try { localStorage.setItem('crk:theme', t); } catch(e) {}
   }
